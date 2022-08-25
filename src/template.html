@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sorting Visualizer</title>
+    <!-- <link rel="stylesheet" href="./src/style.css"> -->
+  </head>
+  <body>
+    <div class="header">
+      <div class="title">
+        <p>Sorting Visualizer</p>
+      </div>
+      <div class="menu">
+        <p >Bubble Sort</p>
+        <p>Selection Sort</p>
+        <p>Quick Sort</p>
+        <p>Merge Sort</p>
+        <p>Insertion Sort</p>
+      </div>
+    </div>
+    <div id="inputSection">
+      <div class="style-input">
+      <input placeholder="Enter a number between 1-500" maxlength="3"></input>
+      <button id="initialize">initialize 🡪</button>
+      </div>
+      <div class="sortInput">
+        <button id="sortButton">Start Sort</button>
+        <div id ="displayData"></div>
+        <div id="displayAlgo"></div>
+      </div>
+    </div>
+    <div class="sort" style="opacity:0"></div>
+  </body>
+</html>
