@@ -43,6 +43,7 @@ init.addEventListener('click', setInput);
 const algoDisplay = document.getElementById('displayAlgo');
 algoDisplay.innerHTML = `<p>Current Algorithm: ${algo}</p>`;
 
+
 // initialize menu
 initMenu(start, algo, algoDisplay, function(updateAlgo) {
   // callback to update algo variable
@@ -50,13 +51,15 @@ initMenu(start, algo, algoDisplay, function(updateAlgo) {
 });
 
 
+
+
 // start with 10 items if no input
 function initialize(items = defaultDisplayAmount) {
   let parent = document.querySelector('.sort');
   let child;
 
+  // clear items
   if(myArray.length > 0) {
-    // fadeOpacityTwo(parent);
     myArray = [];
     mySet = {};
 
@@ -64,6 +67,11 @@ function initialize(items = defaultDisplayAmount) {
     while (parent.firstChild) {
       parent.removeChild(parent.firstChild);
     }
+  }
+
+  // remove finished div if it exists
+  if(document.getElementById('finished')) {
+    document.getElementById('finished').remove();
   }
 
 
@@ -92,9 +100,6 @@ function initialize(items = defaultDisplayAmount) {
       : items <= 300 ? child.style.minWidth = '0.2%'
       : child.style.minWidth = '0.1%';
 
-      // won't get correct left positioning until elements are all created
-
-
       // set <p> margin dynamically
     } else {
       i -= 1;
@@ -103,7 +108,6 @@ function initialize(items = defaultDisplayAmount) {
 
   // reset sort button
   if(sortButton.style.visibility === 'hidden') {
-    console.log('sort reactivated');
     sortButton.addEventListener('click', startSort);
     sortButton.style.display = "inline-block";
     sortButton.style.visibility = "visible";
@@ -120,14 +124,12 @@ initialize();
 
 
 function fadeOpacity(parent) {
-  let accumulatorIn = 0;
-  // let accumulatorOut = 1;
-  // console.log('in fade');
+  let accumulator = 0;
 
   function fadeIn() {
-  // console.log(accumulatorIn);
-   parent.style.opacity = accumulatorIn;
-   accumulatorIn += 0.025;
+
+   parent.style.opacity = accumulator;
+   accumulator += 0.025;
 
    if(parent.style.opacity < 1) {
      window.requestAnimationFrame(fadeIn);
@@ -139,56 +141,10 @@ function fadeOpacity(parent) {
 
  window.requestAnimationFrame(fadeIn);
 
-
- // function fadeOut() {
- //   parent.style.opacity = accumulatorOut;
- //   accumulatorOut -= 0.5;
- //   console.log(accumulatorOut);
- //
- //   if(parent.style.opacity > 0) {
- //     window.requestAnimationFrame(fadeOut);
- //   } else {
- //     return;
- //   }
- //
- // };
-
-
-
-//  console.log('opac', parent.style.opacity);
-//
-//  if(parent.style.opacity < 1) {
-//    console.log('fading in');
-//   window.requestAnimationFrame(fadeIn);
-// } else if(parent.style.opacity > 0) {
-//    console.log('fading out');
-//   window.requestAnimationFrame(fadeOut);
-// }
-
 };
 
 
-function fadeOpacityTwo(parent) {
-  let accumulatorOut = 1;
 
-
-  function fadeOut() {
-    parent.style.opacity = accumulatorOut;
-    accumulatorOut -= 0.025;
-    // console.log(accumulatorOut);
-
-    if(parent.style.opacity > 0) {
-      window.requestAnimationFrame(fadeOut);
-    } else {
-      return;
-    }
-
-  };
-
-  window.requestAnimationFrame(fadeOut);
-
-
-}
 
 
 async function startSort() {
@@ -223,7 +179,7 @@ async function startSort() {
 
   switch(algo) {
       case menuEnum.SELECTION_SORT:
-        selectionSort(myArray, speed);
+        await selectionSort(myArray, speed, continueSort);
         break;
 
       case menuEnum.QUICK_SORT:
@@ -244,26 +200,40 @@ async function startSort() {
        break;
     }
 
+
+  // add gradient display back after sorting is finished
+  colorInput.setAttribute('data-display', 'false');
+
+  init.style.visibility = "visible";
+  init.addEventListener('click', setInput);
+
   if(continueSort.continue === false) {
   // add buttons back
 
   // stopButton.removeEventListener('click');
   stopButton.remove();
-  init.style.visibility = "visible";
-  init.addEventListener('click', setInput);
-
-  // add gradient display back after sorting is finished
-  colorInput.setAttribute('data-display', 'false');
+  // init.style.visibility = "visible";
+  // init.addEventListener('click', setInput);
 
   // reset continue state
   continueSort.continue = true;
+
+  // initialize items
   initialize();
 } else {
 
   // memory leak?
   stopButton.remove();
-  init.style.visibility = "visible";
-  init.addEventListener('click', setInput);
+
+  // create finish text div
+  let finished = document.createElement('div');
+  document.querySelector('.sortInput').append(finished);
+  finished.setAttribute('id', 'finished');
+  finished.innerText = 'Sorting Complete!';
+
+  //
+  // init.style.visibility = "visible";
+  // init.addEventListener('click', setInput);
 }
 
 

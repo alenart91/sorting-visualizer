@@ -1,10 +1,8 @@
 import sleep from "./time.js";
 
-
-
 // always switches the greatest value for the smallest value in each iteration
 
-let selectionSort = async (myArray, time) => {
+let selectionSort = async (myArray, time, continueSort) => {
   let parent = document.querySelector('.sort');
   let indexMin;
 
@@ -32,58 +30,94 @@ let selectionSort = async (myArray, time) => {
   let finalX,
   finalY;
 
-  // debugger;
-
   for(let i = 0; i < myArray.length - 1; i++) {
+
+    // stop sorting
+    if(continueSort.continue === false) {
+      return;
+    }
+
     indexMin = i;
-    console.log('indexmin', indexMin);
+
+    if(i > 0) {
+    firstChild.removeAttribute('data-current');
+  }
+
     // i and indexMin = 0
     // j = i because the minimum value will be put at the beginning of each full iteration
-    for(var j = i; j < myArray.length; j++) {
+    for(let j = i; j < myArray.length; j++) {
 
+      // stop sorting
+      if(continueSort.continue === false) {
+        return;
+      }
+
+      await sleep(time);
       firstChild = document.getElementById(myArray[i]);
-      firstChild.setAttribute('data-current', 'true');
-
-      secondChild = document.getElementById(myArray[indexMin]);
-      secondChild.setAttribute('data-compare', 'true');
-      // indexMin stays the same until if statement executes
-      // j iterates over all the items
-      console.log('indexmin in j', indexMin, 'j', j);
-      console.log('array indexmin', myArray[indexMin], 'array j', myArray[j]);
+      secondChild = document.getElementById(myArray[j]);
 
       // first iteration always compares the same element
-      // firstChild.setAttribute('data-current', 'true');
-      // secondChild.setAttribute('data-compare', 'true');
+      if(j !== i) {
+
+        await sleep(time);
+        secondChild.setAttribute('data-compare', 'true');
+      }
+
+      firstChild.setAttribute('data-current', 'true');
+
+      // indexMin stays the same until if statement executes
+      // j iterates over all the items
+
+
 
       // sets indexMin to j which updates immediately after the if statement
       // so indexMin is always one behind
+      await sleep(time);
 
-      secondChild.setAttribute('data-compare', 'false');
+
       if(myArray[indexMin] > myArray[j]) {
-        console.log('greater than');
+
+        // stop sorting
+        if(continueSort.continue === false) {
+          return;
+        }
 
         // sets index min to the last number it was bigger than
         // making it the current minimum number
         indexMin = j;
-        secondChild = document.getElementById(myArray[indexMin]);
-        secondChild.setAttribute('data-compare', 'true');
       }
+
+      if(j === (myArray.length - 1) && j === indexMin) {
+
+      // break out of loop before attribute is removed
+      break;
+     }
+
+     secondChild.removeAttribute('data-compare');
+
     };
-        // ran after full j loop iteration
+
+    // ran after full j loop iteration
     if(i !== indexMin) {
 
-      // console.log('last if', 'array i', myArray[i], 'array indexmin', myArray[indexMin]);
+      // stop sorting
+      if(continueSort.continue === false) {
+        return;
+      }
 
+      await sleep(time);
       // have to reassign values to make sure they match before they are swapped
       firstChild = document.getElementById(myArray[i]);
       secondChild = document.getElementById(myArray[indexMin]);
+
+      // if(j !== indexMin)
+      secondChild.setAttribute('data-compare', 'true');
+      await sleep(time);
 
       // swap
       let aux = myArray[i];
       myArray[i] = myArray[indexMin];
       myArray[indexMin] = aux;
-
-      // debugger;
 
       // swap animation
       firstChild.style.transform ? styleFirst = firstChild.style.transform.replace(/[^-?\d.]/g, '') : styleFirst = 0;
@@ -105,8 +139,6 @@ let selectionSort = async (myArray, time) => {
       xBase = (+yNum) - (+xNum) + (+finNumOne);
       yBase = (+xNum) - (+yNum) + (+finNumTwo);
 
-      // console.log(xBase, yBase);
-
       finalX = xBase.toFixed(2) + 'px';
       finalY = yBase.toFixed(2) + 'px';
 
@@ -119,27 +151,29 @@ let selectionSort = async (myArray, time) => {
       firstChild.style.zIndex = '0';
       secondChild.style.zIndex = '0';
 
-      firstChild.setAttribute('data-current', 'false');
-      secondChild.setAttribute('data-compare', 'false');
+      firstChild.removeAttribute('data-current');
+      secondChild.removeAttribute('data-compare');
 
-      await sleep(600);
+      await sleep(time);
 
       // items may move multiple places. They need to trade exact positions in the DOM.
-      // let temp = document.createElement('div');
-      // parent.prepend(temp);
-      //
-      // secondChild.after(temp);
-      // firstChild.after(secondChild); // elem.after(p) == p is after elem
-      // temp.after(firstChild);
-      //
-      // temp.remove();
+      let temp = document.createElement('div');
+      parent.prepend(temp);
 
-      // debugger;
+      secondChild.after(temp);
+      firstChild.after(secondChild); // elem.after(p) == p is after elem
+      temp.after(firstChild);
 
-      console.log(myArray);
+      temp.remove();
+
+      firstChild.style.transform = `translateX(0px)`;
+      secondChild.style.transform = `translateX(0px)`;
+
+
     }
   }
 
+  firstChild.removeAttribute('data-current');
 
 
 };
