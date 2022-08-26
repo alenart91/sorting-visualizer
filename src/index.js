@@ -1,5 +1,6 @@
 import selectionSort from "./selectionSort.js";
 import bubbleSort from "./bubbleSort.js";
+import insertionSort from "./insertionSort.js";
 
 import initMenu from "./menu.js";
 import messageBar from "./messageBar.js";
@@ -15,6 +16,7 @@ let init = document.getElementById('initialize');
 let myArray = [];
 let randomNum;
 let mySet = {};
+let sorting = {isSorting: false};
 
 // freeze the object
 const menuEnum = Object.freeze({
@@ -45,7 +47,7 @@ algoDisplay.innerHTML = `<p>Current Algorithm: ${algo}</p>`;
 
 
 // initialize menu
-initMenu(start, algo, algoDisplay, function(updateAlgo) {
+initMenu(start, algo, algoDisplay, sorting, function(updateAlgo) {
   // callback to update algo variable
   return algo = updateAlgo;
 });
@@ -148,12 +150,16 @@ function fadeOpacity(parent) {
 
 
 async function startSort() {
-  console.log('start sort');
+
+  // set sorting value to true
+  sorting.isSorting = true;
+
   // disable buttons before sorting begins
   sortButton.style.visibility = "hidden";
   sortButton.style.display = "none";
   init.style.visibility = "hidden";
 
+  // remove event listeners
   sortButton.removeEventListener('click', startSort);
   init.removeEventListener('click', setInput);
 
@@ -169,11 +175,8 @@ async function startSort() {
   document.querySelector('.sortInput').append(stopButton);
 
   stopButton.addEventListener('click', function() {
-    // console.log('stop button');
-    // sortButton.style.visibility = "hidden";
     continueSort.continue = false;
     return;
-
   });
 
 
@@ -191,15 +194,16 @@ async function startSort() {
         break;
 
      case menuEnum.INSERTION_SORT:
-        return;
+        await insertionSort(myArray, speed, continueSort);
         break;
 
      case menuEnum.BUBBLE_SORT:
        await bubbleSort(myArray, speed, continueSort);
-       // await sortTest(myArray, speed, continueSort);
        break;
     }
 
+  // change sorting status back to false
+  sorting.isSorting = false;
 
   // add gradient display back after sorting is finished
   colorInput.setAttribute('data-display', 'false');
@@ -207,19 +211,20 @@ async function startSort() {
   init.style.visibility = "visible";
   init.addEventListener('click', setInput);
 
+  // if stop button is clicked
   if(continueSort.continue === false) {
-  // add buttons back
 
+  // add buttons back
   // stopButton.removeEventListener('click');
   stopButton.remove();
-  // init.style.visibility = "visible";
-  // init.addEventListener('click', setInput);
 
   // reset continue state
   continueSort.continue = true;
 
   // initialize items
   initialize();
+
+  // if sorting is completed
 } else {
 
   // memory leak?
@@ -229,11 +234,7 @@ async function startSort() {
   let finished = document.createElement('div');
   document.querySelector('.sortInput').append(finished);
   finished.setAttribute('id', 'finished');
-  finished.innerText = 'Sorting Complete!';
-
-  //
-  // init.style.visibility = "visible";
-  // init.addEventListener('click', setInput);
+  finished.innerText = `${algo}ing Complete!`;
 }
 
 

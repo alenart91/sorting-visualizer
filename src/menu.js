@@ -1,4 +1,4 @@
-function initMenu(start, algo, algoDisplay, callback) {
+function initMenu(start, algo, algoDisplay, sorting, callback) {
 
   let menu = document.querySelector('.menu');
 
@@ -12,21 +12,25 @@ function initMenu(start, algo, algoDisplay, callback) {
 
   function menuSelection(e) {
 
+  if(sorting.isSorting === true) {
+    e.preventDefault();
+    return;
+  }
+
   if(initializedMenuItem !== e.target) {
     initializedMenuItem.removeAttribute('data-selected');
     initializedMenuItem = document.getElementById(`${e.target.innerText}`);
     initializedMenuItem.setAttribute('data-selected', 'true');
+
     algo = e.target.innerText;
-    console.log(algo);
     algoDisplay.innerHTML = `<p>Current Algorithm: ${algo}</p>`;
     return callback(algo);
+
   } else {
     // error
-  }
+    }
 
-
-};
-
+  };
 };
 
 
