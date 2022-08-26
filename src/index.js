@@ -32,7 +32,7 @@ const menuEnum = Object.freeze({
 const speed = 400;
 const limit = 500;
 let defaultDisplayAmount = 10;
-const start = menuEnum.BUBBLE_SORT;
+const start = menuEnum.INSERTION_SORT;
 let algo = start;
 let continueSort = {continue: true};
 
