@@ -52,18 +52,19 @@ let selectionSort = async (myArray, time, continueSort) => {
         return;
       }
 
-      await sleep(time);
+      // await sleep(time);
       firstChild = document.getElementById(myArray[i]);
       secondChild = document.getElementById(myArray[j]);
 
       // first iteration always compares the same element
       if(j !== i) {
 
-        await sleep(time);
+        // await sleep(time);
         secondChild.setAttribute('data-compare', 'true');
       }
 
       firstChild.setAttribute('data-current', 'true');
+
 
       // indexMin stays the same until if statement executes
       // j iterates over all the items
