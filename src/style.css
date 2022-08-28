@@ -93,25 +93,6 @@ p[data-initialize ='true'] {
   width: 2rem;
 }
 
-/* .sort {
-  display: inline-block;
-  width:100%;
-  height: 50vh;
-  text-align:center;
-}
-
-.items {
-
-  height: 100%;
-  background: grey;
-  text-align: center;
-  width: 2%;
-  display: inline-block;
-  margin-left: 1em;
-  margin-right: 1em;
-  position: absolute;
-} */
-
 .items[data-current ='true'] {
   background-color: #e91e63;
 }
@@ -319,4 +300,15 @@ button { padding: 0; background: none; border: none; outline: none; }
 @keyframes fadeout {
   from {bottom: 0px; opacity: 1;}
   to {bottom: -500px; opacity: 0;}
+}
+
+
+@media only screen and (max-width: 1000px) {
+  .items {
+    font-size: small;
+    min-width: 0.3%;
+  }
+  .items p {
+    width: 1 rem;
+  }
 }

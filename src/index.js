@@ -8,15 +8,12 @@ import messageBar from "./messageBar.js";
 import time from "./time.js";
 import "./style.css";
 
-// import sortTest from "./sortTest.js";
-
 
 let sortButton = document.getElementById('sortButton');
 let init = document.getElementById('initialize');
 let myArray = [];
 let randomNum;
 let mySet = {};
-let sorting = {isSorting: false};
 
 // freeze the object
 const menuEnum = Object.freeze({
@@ -29,12 +26,48 @@ const menuEnum = Object.freeze({
 
 
 // configurations
-const speed = 400;
-const limit = 500;
+let speed = 400;
+let limit = 500;
 let defaultDisplayAmount = 10;
-const start = menuEnum.INSERTION_SORT;
+const start = menuEnum.BUBBLE_SORT;
 let algo = start;
 let continueSort = {continue: true};
+let sorting = {isSorting: false};
+let screenSize = document.body.clientWidth;
+
+
+
+// handle screen resizes
+window.addEventListener('resize', size);
+
+function size(e) {
+  screenSize = document.body.clientWidth;
+  let mainInput = document.getElementById('itemInput');
+
+  console.log('client width', document.body.clientWidth); // includes scrollbar
+
+  if(screenSize < 1000) {
+    limit = 200;
+    mainInput.setAttribute('placeholder', 'Enter a number between 1-200');
+  } else {
+    limit = 500;
+    mainInput.setAttribute('placeholder', 'Enter a number between 1-500');
+  }
+
+};
+
+
+// handle starting screen size with no resize
+function startingSize() {
+  let mainInput = document.getElementById('itemInput');
+
+  if(screenSize < 1000) {
+    limit = 200;
+    mainInput.setAttribute('placeholder', 'Enter a number between 1-200');
+  }
+};
+
+startingSize();
 
 
 // add event listeners
@@ -88,7 +121,14 @@ function initialize(items = defaultDisplayAmount) {
       myArray.push(randomNum);
 
       child = document.createElement('div');
-      items > 50 ? child.innerHTML = `` : child.innerHTML = `<p>${randomNum}</p>`;
+
+      if(screenSize < 1000) {
+        items > 20 ? child.innerHTML = `` : child.innerHTML = `<p>${randomNum}</p>`;
+      } else {
+        items > 50 ? child.innerHTML = `` : child.innerHTML = `<p>${randomNum}</p>`;
+      }
+
+      // items > 50 ? child.innerHTML = `` : child.innerHTML = `<p>${randomNum}</p>`;
       child.setAttribute('id', `${randomNum}`);
       child.setAttribute('class', 'items');
       parent.appendChild(child);
@@ -102,7 +142,6 @@ function initialize(items = defaultDisplayAmount) {
       : items <= 300 ? child.style.minWidth = '0.2%'
       : child.style.minWidth = '0.1%';
 
-      // set <p> margin dynamically
     } else {
       i -= 1;
     }
@@ -254,7 +293,7 @@ function setInput() {
     defaultDisplayAmount = inputValue;
     return initialize(inputValue);
 
-  } else if(inputValue > 500) {
+  } else if(inputValue > limit) {
       return messageBar(`Please enter a number ${limit} or less. You entered ${inputValue}`);
   }
 
