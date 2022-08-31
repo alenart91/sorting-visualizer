@@ -146,15 +146,15 @@ let sortTest = async (myArray, time, continueSort) => {
       //
       // transX = moveX + 'px';
       // transY = moveY + 'px';
-      firstChild.style.transition = `transform 500ms`;
-      secondChild.style.transition = `transform 500ms`;
-
-      firstChild.style.transform = `translateX(${finalX})`;
-      secondChild.style.transform = `translateX(${finalY})`;
+      // firstChild.style.transition = `transform 500ms`;
+      // secondChild.style.transition = `transform 500ms`;
+      //
+      // firstChild.style.transform = `translateX(${finalX})`;
+      // secondChild.style.transform = `translateX(${finalY})`;
 
       // console.log('in loop', j);
       // debugger;
-      // await swap(firstChild, secondChild, xBase, yBase, finalX, finalY, j);
+      await swap(firstChild, secondChild, xBase, yBase, finalX, finalY, j);
       //
       // console.log('after await');
 
@@ -266,10 +266,12 @@ async function swap(firstChild, secondChild, xBase, yBase, finalX, finalY, j) {
 
  // return await swapItems();
 
-// return new Promise( function(resolve, reject) {
-//    window.requestAnimationFrame(swapItems);
-//    console.log('after animation');
-//  })
+return new Promise( function(resolve, reject) {
+   window.requestAnimationFrame(swapItems);
+   console.log('after animation');
+});
+
+
 //  .then(console.log('hit'));
 
 // let anim = new Promise(window.requestAnimationFrame);

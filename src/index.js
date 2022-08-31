@@ -1,12 +1,17 @@
 import selectionSort from "./selectionSort.js";
 import bubbleSort from "./bubbleSort.js";
 import insertionSort from "./insertionSort.js";
+import mergeSort from "./mergeSort.js";
+
+import bubbleSortAnimation from "./bubbleSortWorker.js";
 
 import initMenu from "./menu.js";
 import messageBar from "./messageBar.js";
 
 import time from "./time.js";
 import "./style.css";
+
+import sortTest from "./sortTest.js"
 
 
 let sortButton = document.getElementById('sortButton');
@@ -229,7 +234,7 @@ async function startSort() {
         break;
 
       case menuEnum.MERGE_SORT:
-        return;
+        await mergeSort(myArray, speed, continueSort);
         break;
 
      case menuEnum.INSERTION_SORT:
@@ -237,14 +242,60 @@ async function startSort() {
         break;
 
      case menuEnum.BUBBLE_SORT:
-       await bubbleSort(myArray, speed, continueSort);
-       break;
+        // await bubbleSort(myArray, speed, continueSort);
+        // await sortTest(myArray, speed, continueSort);
+        bubbleSortAnimation(myArray, afterSort);
+        break;
     }
+
+//   console.log('bubble finished');
+//
+//   // change sorting status back to false
+//   sorting.isSorting = false;
+//
+//   // add gradient display back after sorting is finished
+//   colorInput.setAttribute('data-display', 'false');
+//
+//   init.style.visibility = "visible";
+//   init.addEventListener('click', setInput);
+//
+//   // if stop button is clicked
+//   if(continueSort.continue === false) {
+//
+//   // add buttons back
+//   // stopButton.removeEventListener('click');
+//   stopButton.remove();
+//
+//   // reset continue state
+//   continueSort.continue = true;
+//
+//   // initialize items
+//   initialize();
+//
+//   // if sorting is completed
+// } else {
+//
+//   // memory leak?
+//   stopButton.remove();
+//
+//   // create finish text div
+//   let finished = document.createElement('div');
+//   document.querySelector('.sortInput').append(finished);
+//   finished.setAttribute('id', 'finished');
+//   finished.innerText = `${algo}ing Complete!`;
+// }
+
+};
+
+
+function afterSort() {
+  console.log('bubble finished');
 
   // change sorting status back to false
   sorting.isSorting = false;
 
   // add gradient display back after sorting is finished
+  let colorInput = document.querySelector(".style-input");
   colorInput.setAttribute('data-display', 'false');
 
   init.style.visibility = "visible";
@@ -275,8 +326,6 @@ async function startSort() {
   finished.setAttribute('id', 'finished');
   finished.innerText = `${algo}ing Complete!`;
 }
-
-
 
 };
 
