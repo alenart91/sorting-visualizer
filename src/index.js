@@ -236,7 +236,7 @@ async function startSort() {
   stopButton.addEventListener('click', function() {
     continueSort.continue = false;
     return;
-  });
+  }, {once: true});
 
 
   switch(algo) {
@@ -277,12 +277,10 @@ function afterSort() {
   init.style.visibility = "visible";
   init.addEventListener('click', setInput);
 
+  stopButton.remove();
+
   // if stop button is clicked
   if(continueSort.continue === false) {
-
-  // add buttons back
-  // stopButton.removeEventListener('click');
-  stopButton.remove();
 
   // reset continue state
   continueSort.continue = true;
@@ -293,16 +291,13 @@ function afterSort() {
   // if sorting is completed
 } else {
 
-  // memory leak?
-  stopButton.remove();
-
   // create finish text div
   let finished = document.createElement('div');
   document.querySelector('.sortInput').append(finished);
   finished.setAttribute('id', 'finished');
   finished.innerText = `${algo}ing Complete!`;
-}
 
+  }
 };
 
 
