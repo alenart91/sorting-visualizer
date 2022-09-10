@@ -1,4 +1,4 @@
-import sleep from "./time.js";
+import sleep from "../time.js";
 
 // always switches the greatest value for the smallest value in each iteration
 

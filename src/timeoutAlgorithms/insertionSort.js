@@ -1,4 +1,4 @@
-import sleep from "./time.js";
+import sleep from "../time.js";
 
 
 let insertionSort = async (myArray, time, continueSort) => {

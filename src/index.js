@@ -1,17 +1,19 @@
-import selectionSort from "./selectionSort.js";
-import bubbleSort from "./bubbleSort.js";
-import insertionSort from "./insertionSort.js";
-import mergeSort from "./mergeSort.js";
 
-import bubbleSortAnimation from "./bubbleSortWorker.js";
+// sorting animations using setTimeout
+// import selectionSort from "./timeoutAlgorithms/selectionSort.js";
+// import bubbleSort from ".timeoutAlgorithms/bubbleSort.js";
+// import insertionSort from "./timeoutAlgorithms/insertionSort.js";
+// import mergeSort from "./timeoutAlgorithms/mergeSort.js";
+import time from "./time.js";
 
+// sorting animations using requestAnimationFrame
+import bubbleSort from "./algorithms/bubbleSort.js";
+// import mergeSort from "./algorithms/mergeSort.js";
+
+// utils
 import initMenu from "./menu.js";
 import messageBar from "./messageBar.js";
-
-import time from "./time.js";
 import "./style.css";
-
-import sortTest from "./sortTest.js"
 
 
 let sortButton = document.getElementById('sortButton');
@@ -31,7 +33,7 @@ const menuEnum = Object.freeze({
 
 
 // configurations
-let speed = 400;
+let speed = 500;
 let limit = 500;
 let defaultDisplayAmount = 10;
 const start = menuEnum.BUBBLE_SORT;
@@ -49,14 +51,12 @@ function size(e) {
   screenSize = document.body.clientWidth;
   let mainInput = document.getElementById('itemInput');
 
-  console.log('client width', document.body.clientWidth); // includes scrollbar
-
   if(screenSize < 1000) {
     limit = 200;
-    mainInput.setAttribute('placeholder', 'Enter a number between 1-200');
+    mainInput.setAttribute('placeholder', 'Enter a number between 2-200');
   } else {
     limit = 500;
-    mainInput.setAttribute('placeholder', 'Enter a number between 1-500');
+    mainInput.setAttribute('placeholder', 'Enter a number between 2-500');
   }
 
 };
@@ -68,7 +68,7 @@ function startingSize() {
 
   if(screenSize < 1000) {
     limit = 200;
-    mainInput.setAttribute('placeholder', 'Enter a number between 1-200');
+    mainInput.setAttribute('placeholder', 'Enter a number between 2-200');
   }
 };
 
@@ -89,6 +89,21 @@ initMenu(start, algo, algoDisplay, sorting, function(updateAlgo) {
   // callback to update algo variable
   return algo = updateAlgo;
 });
+
+// handle mobile menu
+let hamburger = document.querySelector('.hamburger-lines');
+
+hamburger.addEventListener('click', handleMobile);
+
+function handleMobile() {
+
+  if(hamburger.hasAttribute('data-open')) {
+  hamburger.removeAttribute('data-open');
+} else {
+  hamburger.setAttribute('data-open', 'true');
+}
+
+};
 
 
 
@@ -226,7 +241,7 @@ async function startSort() {
 
   switch(algo) {
       case menuEnum.SELECTION_SORT:
-        await selectionSort(myArray, speed, continueSort);
+        // await selectionSort(myArray, speed, continueSort);
         break;
 
       case menuEnum.QUICK_SORT:
@@ -234,62 +249,23 @@ async function startSort() {
         break;
 
       case menuEnum.MERGE_SORT:
-        await mergeSort(myArray, speed, continueSort);
+        // mergeSort(myArray, speed, continueSort, afterSort);
         break;
 
      case menuEnum.INSERTION_SORT:
-        await insertionSort(myArray, speed, continueSort);
+        // await insertionSort(myArray, speed, continueSort);
         break;
 
      case menuEnum.BUBBLE_SORT:
-        // await bubbleSort(myArray, speed, continueSort);
-        // await sortTest(myArray, speed, continueSort);
-        bubbleSortAnimation(myArray, afterSort);
+        bubbleSort(myArray, speed, continueSort, afterSort);
         break;
     }
-
-//   console.log('bubble finished');
-//
-//   // change sorting status back to false
-//   sorting.isSorting = false;
-//
-//   // add gradient display back after sorting is finished
-//   colorInput.setAttribute('data-display', 'false');
-//
-//   init.style.visibility = "visible";
-//   init.addEventListener('click', setInput);
-//
-//   // if stop button is clicked
-//   if(continueSort.continue === false) {
-//
-//   // add buttons back
-//   // stopButton.removeEventListener('click');
-//   stopButton.remove();
-//
-//   // reset continue state
-//   continueSort.continue = true;
-//
-//   // initialize items
-//   initialize();
-//
-//   // if sorting is completed
-// } else {
-//
-//   // memory leak?
-//   stopButton.remove();
-//
-//   // create finish text div
-//   let finished = document.createElement('div');
-//   document.querySelector('.sortInput').append(finished);
-//   finished.setAttribute('id', 'finished');
-//   finished.innerText = `${algo}ing Complete!`;
-// }
 
 };
 
 
+
 function afterSort() {
-  console.log('bubble finished');
 
   // change sorting status back to false
   sorting.isSorting = false;
@@ -332,12 +308,12 @@ function afterSort() {
 
 function setInput() {
 
-  let input = document.querySelector('input');
+  let input = document.querySelector('#itemInput');
   let stringInputValue = input.value;
   const reg = /^[1-9](\d{1,2})?$/;
   let inputValue = +stringInputValue;
 
-  if(reg.test(stringInputValue) && inputValue <= limit) {
+  if(reg.test(stringInputValue) && inputValue <= limit && inputValue > 1) {
 
     defaultDisplayAmount = inputValue;
     return initialize(inputValue);
@@ -345,6 +321,10 @@ function setInput() {
   } else if(inputValue > limit) {
       return messageBar(`Please enter a number ${limit} or less. You entered ${inputValue}`);
   }
+
+    else if(inputValue < 2) {
+      return messageBar(`Please enter a number 2 or more. You entered ${inputValue}`);
+    }
 
     else {
       return messageBar(`Your entry ${stringInputValue} is not a valid number. Please enter a number ${limit} or less`);

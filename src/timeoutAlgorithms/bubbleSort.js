@@ -1,5 +1,5 @@
 
-import sleep from "./time.js";
+import sleep from "../time.js";
 
 
 let bubbleSort = async (myArray, time, continueSort) => {
