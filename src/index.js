@@ -8,6 +8,7 @@ import time from "./time.js";
 
 // sorting animations using requestAnimationFrame
 import bubbleSort from "./algorithms/bubbleSort.js";
+import insertionSort from "./algorithms/insertionSort.js";
 // import mergeSort from "./algorithms/mergeSort.js";
 
 // utils
@@ -253,7 +254,7 @@ async function startSort() {
         break;
 
      case menuEnum.INSERTION_SORT:
-        // await insertionSort(myArray, speed, continueSort);
+        insertionSort(myArray, speed, continueSort, afterSort);
         break;
 
      case menuEnum.BUBBLE_SORT:
