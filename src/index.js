@@ -9,6 +9,7 @@ import time from "./time.js";
 // sorting animations using requestAnimationFrame
 import bubbleSort from "./algorithms/bubbleSort.js";
 import insertionSort from "./algorithms/insertionSort.js";
+import selectionSort from "./algorithms/selectionSort.js";
 // import mergeSort from "./algorithms/mergeSort.js";
 
 // utils
@@ -242,7 +243,7 @@ async function startSort() {
 
   switch(algo) {
       case menuEnum.SELECTION_SORT:
-        // await selectionSort(myArray, speed, continueSort);
+        selectionSort(myArray, speed, continueSort, afterSort);
         break;
 
       case menuEnum.QUICK_SORT:
