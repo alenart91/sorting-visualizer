@@ -10,7 +10,8 @@ import time from "./time.js";
 import bubbleSort from "./algorithms/bubbleSort.js";
 import insertionSort from "./algorithms/insertionSort.js";
 import selectionSort from "./algorithms/selectionSort.js";
-// import mergeSort from "./algorithms/mergeSort.js";
+import mergeSort from "./algorithms/mergeSort.js";
+import quickSort from "./algorithms/quickSort.js";
 
 // utils
 import initMenu from "./menu.js";
@@ -247,11 +248,11 @@ async function startSort() {
         break;
 
       case menuEnum.QUICK_SORT:
-        return;
+        quickSort(myArray, speed, continueSort, afterSort);
         break;
 
       case menuEnum.MERGE_SORT:
-        // mergeSort(myArray, speed, continueSort, afterSort);
+        mergeSort(myArray, speed, continueSort, afterSort);
         break;
 
      case menuEnum.INSERTION_SORT:
