@@ -107,6 +107,11 @@ p[data-initialize ='true'] {
   background-color: #de95ea;
 }
 
+.items[data-mixed = 'true'] {
+  
+  background-image: linear-gradient(to right, #e91e63 50%, #a0f00e 50%);
+}
+
 #inputSection {
   display: flex;
   flex-direction: column;
