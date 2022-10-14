@@ -1,6 +1,5 @@
 import sleep from "../time.js";
 
-
 let mergeSort = (myArray, speed, continueSort, callback) => {
 
   // create worker when function is invoked
@@ -9,31 +8,35 @@ let mergeSort = (myArray, speed, continueSort, callback) => {
 
   worker.onmessage = (e) => {
 
-    // stop the function when stop button is clicked
-    if(continueSort.continue === false) {
-      worker.terminate();
-      return callback();
+    try {
+
+      // stop the function when stop button is clicked
+      if(continueSort.continue === false) {
+        worker.terminate();
+        return callback();
+      }
+
+      if(e.data.method === 'color') {
+        addColor(e.data.status, e.data.rightArray, e.data.leftArray);
+      }
+
+      if(e.data.method === 'swap') {
+        swap(e.data.left, e.data.right, e.data.leftArray, e.data.rightArray, e.data.result);
+      }
+
+
+      if(e.data.message === 'finished') {
+        // kill worker thread
+        worker.terminate();
+        return callback();
+      }
+
+    } catch(err) {
+        worker.terminate();
+        return callback(err);
     }
 
-    if(e.data.method === 'color') {
-
-      addColor(e.data.status, e.data.rightArray, e.data.leftArray);
-    }
-
-    if(e.data.method === 'swap') {
-
-      swap(e.data.left, e.data.right, e.data.leftArray, e.data.rightArray, e.data.result);
-    }
-
-
-    if(e.data.message === 'finished') {
-
-      // kill worker thread
-      worker.terminate();
-      return callback();
-    }
-
-  }
+  };
 
 
   function addColor(status, rightArray, leftArray) {
@@ -137,7 +140,7 @@ let mergeSort = (myArray, speed, continueSort, callback) => {
     for(let i = 0; i < fullArray.length; i++) {
       let item = document.getElementById(fullArray[i]);
       let distance = (ending.getBoundingClientRect().x - item.getBoundingClientRect().x) + 'px';
-      item.style.transition = 'transform 500ms';
+      item.style.transition = `transform ${speed}ms`;
       item.style.transform = `translateX(${distance})`;
     }
 
@@ -146,13 +149,6 @@ let mergeSort = (myArray, speed, continueSort, callback) => {
 
 
     async function swapItems(timestamp) {
-
-      if (start === undefined) {
-        start = timestamp;
-      }
-
-      const elapsed = timestamp - start;
-      const progress = elapsed / speed;
 
 
       for(let i = 0; i < result.length; i++) {
@@ -163,16 +159,22 @@ let mergeSort = (myArray, speed, continueSort, callback) => {
         let itemWidth = item.getBoundingClientRect().width;
         let itemDistance = container.getBoundingClientRect().width;
 
+        // width of container with no items
         let partialWidth = itemDistance - (itemWidth * (result.length));
+        // gives the distance between each item
         let finalDistance = Math.round((partialWidth / (result.length - (1))) * 100) / 100;
 
         let prevTranslate = +item.style.transform.replace(/[^-?\d.]/g, '');
+        // gives distance to the beginning of the container
         let nextTranslate = finalDistance - itemPosition;
 
         // get the distance from the start of the layout to the container
         let layoutStart = sort.children[0].getBoundingClientRect().x;
         let offSet = container.getBoundingClientRect().x - layoutStart;
 
+        // the formula brings every item to the beginning of the container
+        // this variable adds the spacing of the distance between each item and one item
+        // multiplied by the position (iteration) it needs to be in
         let relativePos = ((finalDistance + itemWidth) * i) + offSet;
 
 
@@ -184,11 +186,6 @@ let mergeSort = (myArray, speed, continueSort, callback) => {
         await sleep(speed);
       }
 
-        // await sleep(speed);
-
-      // if(elapsed < speed) {
-      //    window.requestAnimationFrame(swapItems);
-      // } else {
 
       // remove the items from the container and delete it
       // use the array instead of DOM elements
@@ -201,9 +198,7 @@ let mergeSort = (myArray, speed, continueSort, callback) => {
 
       container.remove();
 
-
       return worker.postMessage({message:'animationFinished'});
-     // }
 
    };
 

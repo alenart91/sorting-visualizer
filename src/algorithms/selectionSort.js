@@ -7,36 +7,43 @@ let selectionSort = (myArray, speed, continueSort, callback) => {
 
   worker.onmessage = (e) => {
 
-    // stop the function when stop button is clicked
-    if(continueSort.continue === false) {
-      worker.terminate();
-      return callback();
+    try {
+
+      // stop the function when stop button is clicked
+      if(continueSort.continue === false) {
+        worker.terminate();
+        return callback();
+      }
+
+      if(e.data.method === 'color') {
+        addColor(e.data.status, e.data.j, e.data.previousItem, e.data.itemOne, e.data.itemTwo, e.data.indexMin);
+      }
+
+      if(e.data.method === 'swap') {
+        swap(e.data.itemOne, e.data.itemTwo);
+      }
+
+      if(e.data.method === 'sorted') {
+        sorted(e.data.indexMin, e.data.i, e.data.length);
+      }
+
+      if(e.data.message === 'finished') {
+        // kill worker thread
+        worker.terminate();
+        return callback();
+      }
+
+    } catch(err) {
+        worker.terminate();
+        return callback(err);
     }
 
-    if(e.data.method === 'color') {
-      addColor(e.data.status, e.data.j, e.data.previousItem, e.data.itemOne, e.data.itemTwo, e.data.indexMin);
-    }
-
-    if(e.data.method === 'swap') {
-      swap(e.data.itemOne, e.data.itemTwo);
-    }
-
-    if(e.data.method === 'sorted') {
-      sorted(e.data.indexMin, e.data.i, e.data.length);
-    }
-
-    if(e.data.message === 'finished') {
-
-      // kill worker thread
-      worker.terminate();
-      return callback();
-    }
   };
 
 
 
   // adds color for sorted items
-  async function sorted(indexMin, i, length) {
+  function sorted(indexMin, i, length) {
 
     let minChild = document.getElementById(indexMin);
     minChild.setAttribute('data-sorted', 'true');
@@ -55,7 +62,7 @@ let selectionSort = (myArray, speed, continueSort, callback) => {
 
 
   // adds and removes colors for comparison
-  async function addColor(status, j, previousItem, itemOne, itemTwo, indexMin) {
+  function addColor(status, j, previousItem, itemOne, itemTwo, indexMin) {
 
     let firstChild = document.getElementById(itemOne);
     let secondChild = document.getElementById(itemTwo);
@@ -63,7 +70,7 @@ let selectionSort = (myArray, speed, continueSort, callback) => {
 
     let start;
 
-    async function animateColor(timestamp) {
+    function animateColor(timestamp) {
 
       if (start === undefined) {
         start = timestamp;
@@ -208,7 +215,6 @@ let selectionSort = (myArray, speed, continueSort, callback) => {
    window.requestAnimationFrame(swapItems);
 
  };
-
 
 };
 

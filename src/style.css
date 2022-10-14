@@ -108,7 +108,7 @@ p[data-initialize ='true'] {
 }
 
 .items[data-mixed = 'true'] {
-  
+
   background-image: linear-gradient(to right, #e91e63 50%, #a0f00e 50%);
 }
 
@@ -246,6 +246,9 @@ button {
 }
 
 #initialize {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: #e6e5e5;
   border-style: none;
   box-sizing: border-box;
@@ -259,6 +262,11 @@ button {
   padding: 0 1rem;
   text-align: center;
   /* transition: all .5s; */
+}
+
+#arrow {
+  width:18px;
+  margin-left: 0.5rem;
 }
 
 #finished {
@@ -276,7 +284,7 @@ button {
   font-family: monospace;
   text-align: center;
   position: absolute;
-  /* z-index: 1; */
+  z-index: 4;
   bottom: 0px;
 }
 
@@ -334,6 +342,10 @@ button {
 
 
 @media only screen and (max-width: 1200px) {
+
+body {
+  height: calc(var(--vh, 1vh) * 100);
+}
 
 .title p {
   font-size: 20px;
@@ -489,6 +501,11 @@ input {
 @keyframes gradient {
   0% {background-position:0 0}
   100% {background-position:100% 0}
+}
+
+
+#messageBar {
+  font-size: 12px;
 }
 
 

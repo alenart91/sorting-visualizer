@@ -6,37 +6,44 @@ let insertionSort = (myArray, speed, continueSort, callback) => {
   worker.postMessage(myArray);
 
   worker.onmessage = (e) => {
+    try {
 
-    // stop the function when stop button is clicked
-    if(continueSort.continue === false) {
-      worker.terminate();
-      return callback();
-    }
 
-    if(e.data.method === 'color') {
-      addColor(e.data.status, e.data.array, e.data.j, e.data.temp, e.data.itemOne, e.data.itemTwo);
-    }
+      // stop the function when stop button is clicked
+      if(continueSort.continue === false) {
+        worker.terminate();
+        return callback();
+      }
 
-    if(e.data.method === 'swap') {
-      swap(e.data.itemOne, e.data.itemTwo);
-    }
+      if(e.data.method === 'color') {
+        addColor(e.data.status, e.data.array, e.data.j, e.data.temp, e.data.itemOne, e.data.itemTwo);
+      }
 
-    if(e.data.method === 'sorted') {
-      sorted(e.data.array, e.data.i, e.data.temp, e.data.itemTwo);
-    }
+      if(e.data.method === 'swap') {
+        swap(e.data.itemOne, e.data.itemTwo);
+      }
 
-    if(e.data.message === 'finished') {
+      if(e.data.method === 'sorted') {
+        sorted(e.data.array, e.data.i, e.data.temp, e.data.itemTwo);
+      }
 
-      // kill worker thread
-      worker.terminate();
-      return callback();
+      if(e.data.message === 'finished') {
+
+        // kill worker thread
+        worker.terminate();
+        return callback();
+      }
+
+    } catch(err) {
+        worker.terminate();
+        return callback(err);
     }
   };
 
 
 
   // adds color for sorted items
-  async function sorted(array, i, temp, itemTwo) {
+  function sorted(array, i, temp, itemTwo) {
 
     let secondChild = document.getElementById(itemTwo);
     let tempChild = document.getElementById(temp);
@@ -66,14 +73,14 @@ let insertionSort = (myArray, speed, continueSort, callback) => {
 
 
   // adds and removes colors for comparison
-  async function addColor(status, array, j, temp, itemOne, itemTwo) {
+  function addColor(status, array, j, temp, itemOne, itemTwo) {
 
     let firstChild = document.getElementById(itemOne);
     let secondChild = document.getElementById(itemTwo);
 
     let start;
 
-    async function animateColor(timestamp) {
+    function animateColor(timestamp) {
 
       if (start === undefined) {
         start = timestamp;

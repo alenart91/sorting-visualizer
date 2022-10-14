@@ -1,11 +1,3 @@
-
-// sorting animations using setTimeout
-// import selectionSort from "./timeoutAlgorithms/selectionSort.js";
-// import bubbleSort from ".timeoutAlgorithms/bubbleSort.js";
-// import insertionSort from "./timeoutAlgorithms/insertionSort.js";
-// import mergeSort from "./timeoutAlgorithms/mergeSort.js";
-import time from "./time.js";
-
 // sorting animations using requestAnimationFrame
 import bubbleSort from "./algorithms/bubbleSort.js";
 import insertionSort from "./algorithms/insertionSort.js";
@@ -72,6 +64,10 @@ function startingSize() {
   if(screenSize < 1000) {
     limit = 200;
     mainInput.setAttribute('placeholder', 'Enter a number between 2-200');
+
+    // better calculation for window height in mobile browsers
+    let vh = window.innerHeight * 0.01;
+    document.body.style.setProperty('--vh', `${vh}px`);
   }
 };
 
@@ -140,7 +136,6 @@ function initialize(items = defaultDisplayAmount) {
     // check if the same number has been added
     if(!mySet.hasOwnProperty(randomNum)) {
       mySet[randomNum] = randomNum;
-
       myArray.push(randomNum);
 
       child = document.createElement('div');
@@ -161,9 +156,18 @@ function initialize(items = defaultDisplayAmount) {
       let itemHeight = items > 50 ? (randomNum) + 5 : randomNum * 1.5 + 5;
       items > 50 ? child.style.height = `${itemHeight}` + 'px' : child.style.height = `${itemHeight}` + '%';
 
+      // set width for items
       items <= 200 ? child.style.minWidth = '0.3%'
       : items <= 300 ? child.style.minWidth = '0.2%'
       : child.style.minWidth = '0.1%';
+
+      // set speed based on number of items
+      items <= 51 ? speed = 400
+      : items <= 101 ? speed = 300
+      : items <= 151 ? speed = 200
+      : items <= 201 ? speed = 100
+      : items <= 301 ? speed = 50
+      : speed = 10;
 
     } else {
       i -= 1;
@@ -268,7 +272,7 @@ async function startSort() {
 
 
 
-function afterSort() {
+function afterSort(error) {
 
   // change sorting status back to false
   sorting.isSorting = false;
@@ -281,6 +285,17 @@ function afterSort() {
   init.addEventListener('click', setInput);
 
   stopButton.remove();
+
+  // handle errors
+  if(error) {
+    console.log(error);
+    // reset continue state
+    continueSort.continue = true;
+
+    // initialize items
+    initialize();
+    return messageBar(error.message);
+  }
 
   // if stop button is clicked
   if(continueSort.continue === false) {

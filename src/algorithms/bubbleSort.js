@@ -8,30 +8,38 @@ let bubbleSort = (myArray, speed, continueSort, callback) => {
 
   worker.onmessage = (e) => {
 
-    // stop the function when stop button is clicked
-    if(continueSort.continue === false) {
-      worker.terminate();
-      return callback();
+    try {
+
+      // stop the function when stop button is clicked
+      if(continueSort.continue === false) {
+        worker.terminate();
+        return callback();
+      }
+
+      if(e.data.method === 'color') {
+        addColor(e.data.array, e.data.itemOne, e.data.itemTwo, e.data.i, e.data.j, e.data.length, e.data.swapped);
+      }
+
+      if(e.data.method === 'swap') {
+        swap(e.data.itemOne, e.data.itemTwo);
+      }
+
+      if(e.data.method === 'sorted') {
+        sorted(e.data.length, e.data.i);
+      }
+
+      if(e.data.message === 'finished') {
+
+        // kill worker thread
+        worker.terminate();
+        return callback();
+      }
+
+    } catch(err) {
+        worker.terminate();
+        return callback(err);
     }
 
-    if(e.data.method === 'color') {
-      addColor(e.data.array, e.data.itemOne, e.data.itemTwo, e.data.i, e.data.j, e.data.length, e.data.swapped);
-    }
-
-    if(e.data.method === 'swap') {
-      swap(e.data.itemOne, e.data.itemTwo);
-    }
-
-    if(e.data.method === 'sorted') {
-      sorted(e.data.length, e.data.i);
-    }
-
-    if(e.data.message === 'finished') {
-
-      // kill worker thread
-      worker.terminate();
-      return callback();
-    }
   };
 
 

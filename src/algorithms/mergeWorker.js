@@ -14,34 +14,21 @@ onmessage = (e) => {
 
 
   if(e.data.message === 'colorFinished') {
-     console.log('color finished');
-    try {
-      let nextIt = sorter.next();
-      if(nextIt.done === true) {
-        console.log('done');
-        postMessage({message: 'finished'});
-      }
-  } catch(err) {
-      console.log(err);
+
+    if(sorter.next().done === true) {
+      postMessage({message: 'finished'});
     }
   }
-
 
 
   if(e.data.message === 'animationFinished') {
-     console.log('swap finished');
-    try {
-      let nextIt = sorter.next();
-      if(nextIt.done === true) {
-        console.log('done with swap');
-        postMessage({message: 'finished'});
-      }
-  } catch(err) {
-      console.log(err);
+
+    if(sorter.next().done === true) {
+      postMessage({message: 'finished'});
     }
   }
 
-}
+};
 
 
 
@@ -71,7 +58,7 @@ function* merge(left, right) {
 
   // if il or ir isn't less than the length that means every element was pushed to result
   // loops through enough elements to know that the length of one of the arrays has been looped through
-  // given that both arrays are seperately sorted this means the rest juat need to be pushed into the array
+  // given that both arrays are seperately sorted this means the rest just need to be pushed into the array
 
   // if you have 2 arrays with 5 elements each it needs to loop through one of them completely
   // then it can know the rest are in order and push them into the final result
@@ -102,8 +89,6 @@ function* merge(left, right) {
   yield addColor('add', left, right);
   yield swap(left[0], right[0], left, right, result);
   yield addColor('remove', left, right);
-
-  // if(result.length === m)
 
   return result;
 

@@ -31,13 +31,13 @@ module.exports = {
     filename: '[name][contenthash].js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
+    assetModuleFilename: '[name][ext]',
   },
   module: {
     rules: [
-      {
-        test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
-      },
+      { test: /\.css$/i, use: [MiniCssExtractPlugin.loader, 'css-loader'] },
+      { test: /\.(png|jpg|gif)$/i, type: 'asset/resource'},
+      { test: /\.svg/, type: 'asset/inline'},
     ],
   },
   // optimization: {

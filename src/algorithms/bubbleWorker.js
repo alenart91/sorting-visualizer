@@ -1,4 +1,3 @@
-
 // Data passed between the main page and workers is copied, not shared
 
 let init = false;
@@ -17,39 +16,24 @@ onmessage = (e) => {
 
   if(e.data.message === 'animationFinished') {
 
-    try {
-      let nextIt = sorter.next();
-      if(nextIt.done === true) {
-        postMessage({message: 'finished'});
-      }
-  } catch(err) {
-    console.log(err);
+    if(sorter.next().done === true) {
+      postMessage({message: 'finished'});
     }
   }
 
 
   if(e.data.message === 'colorFinished') {
 
-    try {
-      let nextIt = sorter.next();
-      if(nextIt.done === true) {
-        postMessage({message: 'finished'});
-      }
-  } catch(err) {
-      console.log(err);
+    if(sorter.next().done === true) {
+      postMessage({message: 'finished'});
     }
   }
 
 
   if(e.data.message === 'sortedFinished') {
 
-    try {
-      let nextIt = sorter.next();
-      if(nextIt.done === true) {
-        postMessage({message: 'finished'});
-      }
-  } catch(err) {
-      console.log(err);
+    if(sorter.next().done === true) {
+      postMessage({message: 'finished'});
     }
   }
 

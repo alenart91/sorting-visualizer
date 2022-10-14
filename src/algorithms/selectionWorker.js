@@ -15,14 +15,8 @@ onmessage = (e) => {
 
   if(e.data.message === 'colorFinished') {
 
-    try {
-      let nextIt = sorter.next();
-      if(nextIt.done === true) {
-
-        postMessage({message: 'finished'});
-      }
-  } catch(err) {
-      console.log(err);
+    if(sorter.next().done === true) {
+      postMessage({message: 'finished'});
     }
   }
 
@@ -30,31 +24,20 @@ onmessage = (e) => {
 
   if(e.data.message === 'animationFinished') {
 
-    try {
-      let nextIt = sorter.next();
-      if(nextIt.done === true) {
-
-        postMessage({message: 'finished'});
-      }
-  } catch(err) {
-      console.log(err);
+    if(sorter.next().done === true) {
+      postMessage({message: 'finished'});
     }
   }
 
 
   if(e.data.message === 'sortedFinished') {
 
-    try {
-      let nextIt = sorter.next();
-      if(nextIt.done === true) {
-        postMessage({message: 'finished'});
-      }
-  } catch(err) {
-      console.log(err);
+    if(sorter.next().done === true) {
+      postMessage({message: 'finished'});
     }
   }
 
-}
+};
 
 
 
@@ -64,7 +47,7 @@ function* sort(myArray) {
   for(let i = 0; i < myArray.length - 1; i++) {
     // variable for j value outside of j loop
     let jVar;
-    indexMin = i;
+    let indexMin = i;
 
     // i and indexMin = 0
     // j = i because the minimum value will be put at the beginning of each full iteration
